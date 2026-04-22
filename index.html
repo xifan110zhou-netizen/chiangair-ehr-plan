@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>长龙航空 eHR 规划大图</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f4f8;min-height:100vh;padding:32px 20px;color:#1f2a37}
+.page{max-width:1500px;margin:0 auto}
+.banner{background:linear-gradient(135deg,#1a5fb4,#3584e4);border-radius:18px 18px 0 0;padding:24px 36px;text-align:center;color:#fff}
+.banner h1{font-size:28px;font-weight:800;letter-spacing:5px;margin-bottom:4px}
+.banner .sub{font-size:13px;opacity:.85;letter-spacing:2px}
+.layer-bar{background:#1a5fb4;color:#fff;text-align:center;padding:7px;font-size:12px;font-weight:700;letter-spacing:3px;border-left:2px solid #c0d3eb;border-right:2px solid #c0d3eb}
+
+/* === L1 Role grid === */
+.l1{display:grid;grid-template-columns:1fr 1fr 1.3fr 1.3fr 1fr 1fr;border-left:2px solid #c0d3eb;border-right:2px solid #c0d3eb;background:#fff}
+.rc{border-right:1px solid #e5ebf5;display:flex;flex-direction:column}
+.rc:last-child{border-right:none}
+.rc-h{padding:14px 10px 10px;text-align:center;border-bottom:1px solid #e5ebf5}
+.rc-t{font-size:15px;font-weight:800;color:#1a5fb4;margin-bottom:4px}
+.rc-s{display:inline-block;font-size:10px;font-weight:700;padding:2px 10px;border-radius:99px;letter-spacing:1px}
+.s1{background:#e8f0fe;color:#1a5fb4}.s2{background:#e8f5e9;color:#2e7d32}.s3{background:#fff3e0;color:#e65100}.s4{background:#f3e5f5;color:#7b1fa2}.s5{background:#e3f2fd;color:#0277bd}.s6{background:#fce4ec;color:#c62828}
+.rc-b{padding:10px 8px;flex:1;display:flex;flex-direction:column;gap:4px}
+.ri{padding:6px 8px;border-radius:7px;font-size:11px;font-weight:600;text-align:center;line-height:1.4}
+.c1 .ri{background:#e8f0fe;color:#1a5fb4;border:1px solid #c5d9f5}
+.c2 .ri{background:#e8f5e9;color:#2e7d32;border:1px solid #c8e6c9}
+.c3 .ri{background:#fff3e0;color:#e65100;border:1px solid #ffe0b2}
+.c4 .ri{background:#f3e5f5;color:#7b1fa2;border:1px solid #e1bee7}
+.c5 .ri{background:#e3f2fd;color:#0277bd;border:1px solid #b3e5fc}
+.c6 .ri{background:#fce4ec;color:#c62828;border:1px solid #f8bbd0}
+.rg2{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+
+/* === Connector === */
+.conn{height:40px;border-left:2px solid #c0d3eb;border-right:2px solid #c0d3eb;background:#fff;display:flex;align-items:center;justify-content:center}
+.conn span{background:#1a5fb4;color:#fff;padding:3px 14px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:2px}
+
+/* === L2 Diagnosis (现状诊断) === */
+.l2d-wrap{border-left:2px solid #c0d3eb;border-right:2px solid #c0d3eb;background:#fff;padding:18px 20px 20px}
+.l2d-summary{background:linear-gradient(135deg,#fff1f2,#fef3c7);border:1.5px solid #fecaca;border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center}
+.l2d-sum-label{font-size:13px;font-weight:800;color:#b91c1c;letter-spacing:2px;padding:4px 12px;background:#fee2e2;border-radius:6px}
+.l2d-sum-item{font-size:15px;font-weight:800;color:#991b1b;padding:4px 10px;position:relative}
+.l2d-sum-item+.l2d-sum-item::before{content:'·';position:absolute;left:-6px;color:#fca5a5;font-weight:900}
+.l2d-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.l2d-card{border-radius:12px;padding:14px;border:1.5px solid;display:flex;flex-direction:column;gap:8px}
+.l2d-head{display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1px dashed}
+.l2d-icon{font-size:11px;font-weight:800;padding:3px 10px;border-radius:99px;letter-spacing:1px}
+.l2d-name{font-size:15px;font-weight:800}
+.l2d-body{font-size:12.5px;line-height:1.7;color:#374151}
+.l2d-body b{font-weight:700}
+.l2d-c1{background:linear-gradient(135deg,#f5f3ff,#fff);border-color:#ddd6fe}
+.l2d-c1 .l2d-head{border-color:#c4b5fd}
+.l2d-c1 .l2d-icon{background:#ede9fe;color:#5b21b6}
+.l2d-c1 .l2d-name{color:#5b21b6}
+.l2d-c2{background:linear-gradient(135deg,#f0fdf4,#fff);border-color:#a7f3d0}
+.l2d-c2 .l2d-head{border-color:#86efac}
+.l2d-c2 .l2d-icon{background:#d1fae5;color:#166534}
+.l2d-c2 .l2d-name{color:#166534}
+.l2d-c3{background:linear-gradient(135deg,#fffbeb,#fff);border-color:#fde68a}
+.l2d-c3 .l2d-head{border-color:#fcd34d}
+.l2d-c3 .l2d-icon{background:#fef3c7;color:#92400e}
+.l2d-c3 .l2d-name{color:#92400e}
+.l2d-c4{background:linear-gradient(135deg,#fff7ed,#fff);border-color:#fed7aa}
+.l2d-c4 .l2d-head{border-color:#fdba74}
+.l2d-c4 .l2d-icon{background:#ffedd5;color:#9a3412}
+.l2d-c4 .l2d-name{color:#9a3412}
+
+/* === L2 Architecture + Side panel === */
+.l2-wrap{border:2px solid #c0d3eb;border-top:none;background:#fff;display:grid;grid-template-columns:1fr 400px;min-height:500px;overflow:hidden}
+.l2-main{padding:20px;border-right:1px solid #e5ebf5;overflow-y:auto}
+.l2-side{padding:20px;background:#f8fbff;overflow-y:auto;position:sticky;top:0;align-self:start;max-height:100vh}
+.arch-layers{display:flex;flex-direction:column;gap:0}
+.arch-row-wrap{position:relative}
+.arch-row-label{font-size:11px;font-weight:800;letter-spacing:2px;padding:6px 12px;margin-bottom:6px;border-radius:6px;display:inline-block}
+.arl-infra{background:#e5e7eb;color:#424242}.arl-platform{background:#dbeafe;color:#1a5fb4}.arl-biz{background:#d1fae5;color:#166534}.arl-talent{background:#ffedd5;color:#9a3412}.arl-aviation{background:#ede9fe;color:#5b21b6}
+.arch-row{display:flex;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.arch-card{flex:1;min-width:120px;padding:12px;border-radius:12px;cursor:pointer;transition:transform .15s,box-shadow .15s;position:relative}
+.arch-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.arch-card.sel{outline:2.5px solid #1a5fb4;box-shadow:0 6px 20px rgba(26,95,180,.18)}
+.ac-n{font-size:14px;font-weight:800;margin-bottom:2px}
+.ac-d{font-size:10px;color:#6b7280;line-height:1.4}
+.ac-tag{position:absolute;top:8px;right:8px;font-size:8px;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:.5px}
+.t-infra{background:linear-gradient(135deg,#f5f5f5,#fff);border:1px solid #e0e0e0}.t-infra .ac-n{color:#424242}.t-infra .ac-tag{background:#616161;color:#fff}
+.t-plat{background:linear-gradient(135deg,#eef4ff,#fff);border:1px solid #c5d9f5}.t-plat .ac-n{color:#1a5fb4}.t-plat .ac-tag{background:#1a5fb4;color:#fff}
+.t-biz{background:linear-gradient(135deg,#eefaf4,#fff);border:1px solid #a7f3d0}.t-biz .ac-n{color:#166534}.t-biz .ac-tag{background:#16a34a;color:#fff}
+.t-talent{background:linear-gradient(135deg,#fff8eb,#fff);border:1px solid #fde68a}.t-talent .ac-n{color:#9a3412}.t-talent .ac-tag{background:#ea580c;color:#fff}
+.t-avia{background:linear-gradient(135deg,#f0f0ff,#fff);border:1px solid #d1c4e9}.t-avia .ac-n{color:#5b21b6}.t-avia .ac-tag{background:#7c3aed;color:#fff}
+.dep-line{text-align:center;padding:3px 0;color:#94a3b8;font-size:10px;letter-spacing:4px}
+.side-empty{display:flex;align-items:center;justify-content:center;min-height:300px;color:#9ca3af;font-size:13px;text-align:center;line-height:1.8}
+.sp-mod{font-size:18px;font-weight:800;color:#1a5fb4;margin-bottom:4px}
+.sp-src{font-size:10px;color:#9ca3af;margin-bottom:14px}
+.sp-section{margin-bottom:16px}
+.sp-section-title{font-size:12px;font-weight:800;letter-spacing:1px;padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:8px}
+.spt-pain{background:#fee2e2;color:#dc2626}.spt-insight{background:#dbeafe;color:#1a5fb4}.spt-value{background:#d1fae5;color:#166534}
+.sp-list{list-style:none;padding:0}
+.sp-list li{font-size:12px;line-height:1.7;color:#374151;padding-left:14px;position:relative;margin-bottom:5px}
+.sp-list.pain li::before{content:'';position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:2px;background:#dc2626}
+.sp-list.insight li::before{content:'';position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:2px;background:#1a5fb4}
+.sp-list.value li::before{content:'';position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:2px;background:#16a34a}
+.spt-risk{background:#fff7ed;color:#ea580c}
+.sp-list.risk li::before{content:'';position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:2px;background:#ea580c}
+.sp-quote{font-size:11px;color:#6b7280;line-height:1.6;padding:10px 12px;background:#f9fafb;border-left:3px solid #d1d5db;border-radius:0 6px 6px 0;margin-top:8px}
+
+/* === L3 Timeline === */
+.l3-wrap{border:2px solid #c0d3eb;border-top:none;border-radius:0 0 18px 18px;background:#fff;padding:24px 20px 20px;overflow-x:auto}
+.l3-seq{text-align:center;margin-bottom:16px;font-size:13px;color:#6b7280}
+.l3-seq b{color:#1a5fb4}
+.l3-seq .arr{color:#c0d3eb;margin:0 4px}
+.l3{display:grid;grid-template-columns:90px repeat(7,1fr);min-width:1000px;border:1px solid #e5ebf5;border-radius:12px;overflow:hidden}
+.l3 .lh{padding:8px 6px;text-align:center;background:#f8fbff;border-bottom:2px solid #e5ebf5;border-right:1px solid #e5ebf5}
+.l3 .lh-q{font-size:13px;font-weight:700;color:#1a5fb4}
+.l3 .lh-y{font-size:10px;color:#9ca3af}
+.l3 .lh-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;display:inline-block;margin-top:3px}
+.lh-tq2{background:#dbeafe;color:#1a5fb4}.lh-tq3{background:#ede9fe;color:#7c3aed}.lh-tq4{background:#fef3c7;color:#b45309}.lh-t27a{background:#d1fae5;color:#166534}.lh-t27b{background:#fce4ec;color:#c62828}.lh-tgo{background:#e0f2fe;color:#0369a1}.lh-ttrial{background:#fef9c3;color:#854d0e}
+.l3 .lr{padding:12px 6px;display:flex;flex-direction:column;justify-content:center;background:#f8fbff;border-right:2px solid #e5ebf5;border-bottom:1px solid #f0f4f8}
+.l3 .lr-n{font-size:13px;font-weight:800}
+.l3 .lr-s{font-size:9px;margin-top:2px;padding:1px 6px;border-radius:99px;display:inline-block;width:fit-content;font-weight:600}
+.l3 .lc{padding:7px 5px;min-height:60px;display:flex;flex-direction:column;gap:3px;border-bottom:1px solid #f0f4f8;border-right:1px solid #f0f4f8}
+.l3 .lt{padding:4px 8px;border-radius:6px;font-size:10px;line-height:1.4;font-weight:500}
+.l3 .lt.lk{font-weight:700}
+.l3 .lm{display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:9px;font-weight:700;border:1px dashed;margin-top:auto}
+.l3 .lm::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.l3 .ldim{opacity:.35}
+/* L3 module colors - light theme */
+.lm1 .lr-n{color:#b45309}.lm1 .lr-s{background:#fef3c7;color:#b45309}
+.lm1 .lt{background:#fffbeb;border:1px solid #fde68a;color:#92400e}.lm1 .lt.lk{background:#fef3c7;border-color:#fbbf24}
+.lm1 .lm{background:#fffbeb;border-color:#fbbf24;color:#92400e}.lm1 .lm::before{background:#f59e0b}
+.lm2 .lr-n{color:#166534}.lm2 .lr-s{background:#d1fae5;color:#166534}
+.lm2 .lt{background:#f0fdf4;border:1px solid #a7f3d0;color:#166534}.lm2 .lt.lk{background:#d1fae5;border-color:#4ade80}
+.lm2 .lm{background:#f0fdf4;border-color:#4ade80;color:#166534}.lm2 .lm::before{background:#22c55e}
+.lm5 .lr-n{color:#9d174d}.lm5 .lr-s{background:#fce7f3;color:#9d174d}
+.lm5 .lt{background:#fdf2f8;border:1px solid #fbcfe8;color:#9d174d}.lm5 .lt.lk{background:#fce7f3;border-color:#f472b6}
+.lm5 .lm{background:#fdf2f8;border-color:#f472b6;color:#9d174d}.lm5 .lm::before{background:#ec4899}
+.lm6 .lr-n{color:#9a3412}.lm6 .lr-s{background:#ffedd5;color:#9a3412}
+.lm6 .lt{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412}.lm6 .lt.lk{background:#ffedd5;border-color:#fb923c}
+.lm6 .lm{background:#fff7ed;border-color:#fb923c;color:#9a3412}.lm6 .lm::before{background:#f97316}
+.lm3 .lr-n{color:#0e7490}.lm3 .lr-s{background:#cffafe;color:#0e7490}
+.lm3 .lt{background:#ecfeff;border:1px solid #a5f3fc;color:#0e7490}.lm3 .lt.lk{background:#cffafe;border-color:#22d3ee}
+.lm3 .lm{background:#ecfeff;border-color:#22d3ee;color:#0e7490}.lm3 .lm::before{background:#06b6d4}
+.lm4 .lr-n{color:#5b21b6}.lm4 .lr-s{background:#ede9fe;color:#5b21b6}
+.lm4 .lt{background:#f5f3ff;border:1px solid #ddd6fe;color:#5b21b6}.lm4 .lt.lk{background:#ede9fe;border-color:#a78bfa}
+.lm4 .lm{background:#f5f3ff;border-color:#a78bfa;color:#5b21b6}.lm4 .lm::before{background:#8b5cf6}
+/* L3 timeline milestones */
+.l3-timeline{margin-top:24px;position:relative;padding:16px 0 8px}
+.l3-timeline-title{font-size:12px;font-weight:800;letter-spacing:2px;color:#1a5fb4;margin-bottom:16px;text-align:center}
+.tl-track{display:none}
+.tl-track::before{content:'';position:absolute;top:10px;left:30px;right:30px;height:3px;background:linear-gradient(90deg,#fbbf24,#4ade80,#22d3ee,#a78bfa,#f472b6);border-radius:2px}
+.tl-node{position:relative;display:flex;flex-direction:column;align-items:center;min-width:100px;max-width:140px;z-index:1}
+.tl-dot{width:20px;height:20px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px #c0d3eb;margin-bottom:8px;flex-shrink:0}
+.tl-date{font-size:12px;font-weight:700;letter-spacing:1px;margin-bottom:4px}
+.tl-label{font-size:14px;font-weight:700;text-align:center;line-height:1.4;margin-bottom:4px}
+.tl-mod{font-size:11px;padding:2px 8px;border-radius:99px;font-weight:600;display:inline-block}
+.tl-sub{font-size:12px;color:#6b7280;text-align:center;line-height:1.4;margin-top:4px}
+
+.tl-phases{display:flex;gap:20px;padding:0 30px}
+.tl-phase{position:relative;flex:1;display:flex;flex-direction:column}
+.tl-phase-header{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.tl-phase-tag{font-size:15px;font-weight:800;letter-spacing:2px;padding:5px 18px;border-radius:8px;white-space:nowrap}
+.tl-phase-line{flex:1;height:2px;border-radius:1px}
+.tl-phase-nodes{position:relative;display:flex;align-items:flex-start;justify-content:space-around;flex:1}
+.tl-phase-nodes::before{content:'';position:absolute;top:10px;left:0;right:0;height:3px;border-radius:2px}
+.tl-phase:first-child .tl-phase-tag{background:linear-gradient(135deg,#dbeafe,#e0f2fe);color:#1e40af}
+.tl-phase:first-child .tl-phase-line{background:linear-gradient(90deg,#93c5fd,#67e8f9)}
+.tl-phase:first-child .tl-phase-nodes::before{background:linear-gradient(90deg,#fbbf24,#4ade80,#22d3ee)}
+.tl-phase:last-child .tl-phase-tag{background:linear-gradient(135deg,#ede9fe,#fce7f3);color:#7c3aed}
+.tl-phase:last-child .tl-phase-line{background:linear-gradient(90deg,#c4b5fd,#f9a8d4)}
+.tl-phase:last-child .tl-phase-nodes::before{background:linear-gradient(90deg,#a78bfa,#f472b6)}
+
+@media(max-width:1200px){.l1{grid-template-columns:repeat(3,1fr)}.l2-wrap{grid-template-columns:1fr}.l2-side{max-height:none}.l2d-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.l1{grid-template-columns:1fr}.arch-row{flex-direction:column}.l2d-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="banner"><h1>长龙航空 eHR 规划大图</h1><div class="sub">服务全员体验 · 支撑安全合规 · 驱动经营决策</div></div>
+
+<div class="layer-bar">第一层 · 角色工作台</div>
+<div class="l1">
+<div class="rc c1"><div class="rc-h"><div class="rc-t">CEO/高管驾驶舱</div><span class="rc-s s1">经营决策</span></div><div class="rc-b"><div class="ri">关舱门人力成本</div><div class="ri">航线人效分析</div><div class="ri">战略目标完成度</div><div class="ri">人才结构洞察</div><div class="ri">编制与缺口预警</div><div class="ri">资质到期预警</div><div class="ri">安全绩效追踪</div></div></div>
+<div class="rc c2"><div class="rc-h"><div class="rc-t">管理者工作台</div><span class="rc-s s2">洞察团队</span></div><div class="rc-b"><div class="ri">团队人员总览</div><div class="ri">审批中心</div><div class="ri">团队考勤/排班</div><div class="ri">目标分解与追踪</div><div class="ri">绩效评定与校准</div><div class="ri">团队资质状态</div><div class="ri">培训完成率</div></div></div>
+<div class="rc c3"><div class="rc-h"><div class="rc-t">员工自助工作台</div><span class="rc-s s3">高效自助</span></div><div class="rc-b"><div class="rg2"><div class="ri">人事自助申请</div><div class="ri">我的工资条</div><div class="ri">我的考勤</div><div class="ri">我的排班</div><div class="ri">我的目标</div><div class="ri">我的绩效</div><div class="ri">我的资质/执照</div><div class="ri">我的飞行小时</div><div class="ri">绩效申诉</div><div class="ri">体检/复训提醒</div></div></div></div>
+<div class="rc c4"><div class="rc-h"><div class="rc-t">HR专属工作台</div><span class="rc-s s4">All in One</span></div><div class="rc-b"><div class="rg2"><div class="ri">招聘工作台</div><div class="ri">入转调离</div><div class="ri">考勤工作台</div><div class="ri">薪酬工作台</div><div class="ri">绩效工作台</div><div class="ri">培训工作台</div><div class="ri">SSC工作台</div><div class="ri">HRBP工作台</div><div class="ri">COE工作台</div></div></div></div>
+<div class="rc c5"><div class="rc-h"><div class="rc-t">航空专业域工作台</div><span class="rc-s s5">安全合规</span></div><div class="rc-b"><div class="ri">飞行员资质管理</div><div class="ri">乘务员资质管理</div><div class="ri">机务持证管理</div><div class="ri">执照到期预警</div><div class="ri">复训计划与记录</div><div class="ri">体检周期管理</div><div class="ri">停飞/复飞状态</div><div class="ri">值勤约束规则</div><div class="ri">审计与监管留痕</div></div></div>
+<div class="rc c6"><div class="rc-h"><div class="rc-t">HRIS配置工作台</div><span class="rc-s s6">灵活配置</span></div><div class="rc-b"><div class="rg2"><div class="ri">组织与岗位配置</div><div class="ri">入转调离配置</div><div class="ri">权限与角色配置</div><div class="ri">流程与审批配置</div><div class="ri">招聘流程配置</div><div class="ri">考勤假勤配置</div><div class="ri">薪酬福利配置</div><div class="ri">绩效考核配置</div><div class="ri">培训学习配置</div><div class="ri">指标库配置</div><div class="ri">表单与报表配置</div><div class="ri">集成接口管理</div></div></div></div>
+</div>
+
+<div class="conn"><span>角色需求 ▸ 现状诊断</span></div>
+
+<div class="layer-bar">第二层 · 现状诊断</div>
+<div class="l2d-wrap">
+  <div class="l2d-summary">
+    <span class="l2d-sum-label">核心问题</span>
+    <span class="l2d-sum-item">数据散</span>
+    <span class="l2d-sum-item">薪酬乱</span>
+    <span class="l2d-sum-item">成本盲</span>
+    <span class="l2d-sum-item">绩效空</span>
+  </div>
+  <div class="l2d-grid">
+    <div class="l2d-card l2d-c1">
+      <div class="l2d-head">
+        <span class="l2d-icon">绩效管理</span>
+        <span class="l2d-name">绩效空</span>
+      </div>
+      <div class="l2d-body">是"考核流程的<b>记录工具</b>"，而不是"管理意图的<b>执行工具</b>"。</div>
+    </div>
+    <div class="l2d-card l2d-c2">
+      <div class="l2d-head">
+        <span class="l2d-icon">考勤假勤</span>
+        <span class="l2d-name">数据散</span>
+      </div>
+      <div class="l2d-body">不是在管人，而是在<b>对账</b>；规则在脑子里，系统只是记录本，HR成了<b>多系统的缝合者</b>。</div>
+    </div>
+    <div class="l2d-card l2d-c3">
+      <div class="l2d-head">
+        <span class="l2d-icon">薪酬管理</span>
+        <span class="l2d-name">成本盲 / 薪酬乱</span>
+      </div>
+      <div class="l2d-body">无法实时核算，进行成本预测；数据散落在线下；核算业务沉淀到<b>个人</b>而非系统。</div>
+    </div>
+    <div class="l2d-card l2d-c4">
+      <div class="l2d-head">
+        <span class="l2d-icon">人才画像</span>
+        <span class="l2d-name">决策虚</span>
+      </div>
+      <div class="l2d-body">没有完整员工画像，人才决策靠<b>主观判断</b>。</div>
+    </div>
+  </div>
+</div>
+
+<div class="conn"><span>诊断问题 ▸ 驱动产品能力</span></div>
+
+<div class="layer-bar">第三层 · 产品功能架构</div>
+<div class="l2-wrap">
+<div class="l2-main" id="archMain">
+<div class="arch-layers">
+  <div class="arch-row-wrap">
+    <span class="arch-row-label arl-talent">决策与洞察层</span>
+    <div class="arch-row">
+      <div class="arch-card t-talent" data-m="talent" onclick="show('talent')"><div class="ac-n">人才管理</div><div class="ac-d">人才画像 · 盘点 · 继任</div></div>
+      <div class="arch-card t-talent" data-m="report" onclick="show('report')"><div class="ac-n">报表与分析</div><div class="ac-d">统一指标 · 多维报表 · 决策支撑</div></div>
+    </div>
+  </div>
+  <div class="dep-line">▼ 数据汇聚与应用 ▼</div>
+  <div class="arch-row-wrap">
+    <span class="arch-row-label arl-biz">业务应用层</span>
+    <div class="arch-row">
+      <div class="arch-card t-biz" data-m="perf" onclick="show('perf')"><span class="ac-tag">痛点密集</span><div class="ac-n">绩效管理</div><div class="ac-d">目标传导 · 考核执行 · 结果应用</div></div>
+      <div class="arch-card t-biz" data-m="attend" onclick="show('attend')"><span class="ac-tag">痛点密集</span><div class="ac-n">考勤假勤</div><div class="ac-d">规则引擎 · 异常管控 · 排班协同</div></div>
+      <div class="arch-card t-biz" data-m="salary" onclick="show('salary')"><span class="ac-tag">痛点密集</span><div class="ac-n">薪酬管理</div><div class="ac-d">成本核算 · 全流程贯通</div></div>
+      <div class="arch-card t-biz" data-m="recruit" onclick="show('recruit')"><div class="ac-n">招聘管理</div><div class="ac-d">全流程招聘 · 入职衔接</div></div>
+      <div class="arch-card t-biz" data-m="train" onclick="show('train')"><div class="ac-n">培训学习</div><div class="ac-d">课程管理 · 培训追踪</div></div>
+    </div>
+    <div class="arch-row" style="margin-top:4px">
+      <div class="arch-card t-biz" data-m="selfservice" onclick="show('selfservice')"><div class="ac-n">员工服务</div><div class="ac-d">统一入口 · 自助查询</div></div>
+    </div>
+  </div>
+  <div class="dep-line">▼ 依赖核心底座 ▼</div>
+  <div class="arch-row-wrap">
+    <span class="arch-row-label arl-aviation">航空专业域</span>
+    <div class="arch-row">
+      <div class="arch-card t-avia" data-m="cert" onclick="show('cert')"><span class="ac-tag">安全关键</span><div class="ac-n">资质与执照</div><div class="ac-d">全生命周期 · 到期预警</div></div>
+      <div class="arch-card t-avia" data-m="trainpro" onclick="show('trainpro')"><div class="ac-n">训练与健康</div><div class="ac-d">复训 · 体检 · 停飞/复飞</div></div>
+      <div class="arch-card t-avia" data-m="audit" onclick="show('audit')"><div class="ac-n">合规与审计</div><div class="ac-d">值勤约束 · 监管留痕</div></div>
+    </div>
+  </div>
+  <div class="dep-line">▼ 与核心底座双向集成 ▼</div>
+  <div class="arch-row-wrap">
+    <span class="arch-row-label arl-platform">核心底座层</span>
+    <div class="arch-row">
+      <div class="arch-card t-plat" data-m="org" onclick="show('org')"><span class="ac-tag">底座</span><div class="ac-n">组织人事</div><div class="ac-d">组织架构 · 岗位编制 · 员工主数据 · 入转调离</div></div>
+      <div class="arch-card t-plat" data-m="perm" onclick="show('perm')"><span class="ac-tag">底座</span><div class="ac-n">人事权限</div><div class="ac-d">角色权限 · 数据权限 · 功能权限</div></div>
+    </div>
+  </div>
+  <div class="dep-line">▼ 基础设施支撑 ▼</div>
+  <div class="arch-row-wrap">
+    <span class="arch-row-label arl-infra">基础设施层</span>
+    <div class="arch-row">
+      <div class="arch-card t-infra" data-m="flow" onclick="show('flow')"><div class="ac-n">流程引擎</div><div class="ac-d">统一审批流 · 流程编排</div></div>
+      <div class="arch-card t-infra" data-m="form" onclick="show('form')"><div class="ac-n">表单引擎</div><div class="ac-d">自定义表单 · 字段配置</div></div>
+      <div class="arch-card t-infra" data-m="data" onclick="show('data')"><div class="ac-n">数据</div><div class="ac-d">主数据治理 · 数据字典</div></div>
+      <div class="arch-card t-infra" data-m="msg" onclick="show('msg')"><div class="ac-n">消息待办</div><div class="ac-d">打通钉钉消息 · 待办中心</div></div>
+      <div class="arch-card t-infra" data-m="integration" onclick="show('integration')"><div class="ac-n">系统集成</div><div class="ac-d">OA · 财务 · 排班 · 训练</div></div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="l2-side" id="sidePanel">
+<div class="side-empty">点击左侧模块卡片<br>查看痛点 · 需求洞察 · 价值分析</div>
+</div>
+</div>
+
+<div class="conn"><span>产品能力 ▸ 分阶段落地</span></div>
+
+<div class="layer-bar">第四层 · 迭代节奏（2026.4 — 2027.12）</div>
+<div class="l3-wrap">
+<div class="l3-seq"><b>薪酬</b><span class="arr">→</span><b>考勤</b><span class="arr">→</span><b>底座</b><span class="arr">→</span><b>绩效</b><span class="arr">→</span><b>人才画像</b></div>
+<div class="l3">
+  <!-- Header -->
+  <div class="lh"></div>
+  <div class="lh"><div class="lh-q">4-5月</div><div class="lh-y">2026</div><div class="lh-tag lh-tq2">Q2</div></div>
+  <div class="lh"><div class="lh-q">6-7月</div><div class="lh-y">2026</div><div class="lh-tag lh-tq2">Q2</div></div>
+  <div class="lh"><div class="lh-q">8-9月</div><div class="lh-y">2026</div><div class="lh-tag lh-tq3">Q3</div></div>
+  <div class="lh"><div class="lh-q">10-12月</div><div class="lh-y">2026</div><div class="lh-tag lh-tq4">Q4</div></div>
+  <div class="lh"><div class="lh-q">Q1-Q2</div><div class="lh-y">2027</div><div class="lh-tag lh-t27a">Q1</div></div>
+  <div class="lh"><div class="lh-q">Q3</div><div class="lh-y">2027</div><div class="lh-tag lh-t27b">H2</div></div>
+  <div class="lh"><div class="lh-q">Q4</div><div class="lh-y">2027</div><div class="lh-tag lh-t27b">H2</div></div>
+
+  <!-- 薪酬 -->
+  <div class="lr lm1"><div class="lr-n">薪酬</div><div class="lr-s">先行突破</div></div>
+  <div class="lc lm1"><div class="lt lk">小时费原始数据对接</div></div>
+  <div class="lc lm1"><div class="lt lk">关舱门成本可视</div><div class="lm">管理层看到数字</div></div>
+  <div class="lc lm1"><div class="lt">全流程方案设计</div><div class="lt">核算规则建模</div></div>
+  <div class="lc lm1"><div class="lt lk">核算 MVP + 并行运行</div></div>
+  <div class="lc lm1"><div class="lt lk">正式切换</div><div class="lm">薪酬不靠 Excel</div></div>
+  <div class="lc lm1"><div class="lt ldim">持续优化</div></div>
+  <div class="lc lm1"><div class="lt ldim">持续优化</div></div>
+
+  <!-- 考勤 -->
+  <div class="lr lm2"><div class="lr-n">考勤</div><div class="lr-s">双轨收官</div></div>
+  <div class="lc lm2"><div class="lt lk">双轨验证 · 差异修复</div></div>
+  <div class="lc lm2"><div class="lt lk">切换决策</div><div class="lm">正式切换</div></div>
+  <div class="lc lm2"><div class="lt">合规留痕 · 员工自助</div><div class="lt">薪酬接口打通</div></div>
+  <div class="lc lm2"><div class="lt">数据分析 · 风险预警</div></div>
+  <div class="lc lm2"><div class="lt ldim">持续优化</div></div>
+  <div class="lc lm2"><div class="lt ldim">持续优化</div></div>
+  <div class="lc lm2"><div class="lt ldim">持续优化</div></div>
+
+  <!-- 底座 -->
+  <div class="lr lm3"><div class="lr-n">底座</div><div class="lr-s">i人事 27.7到期</div></div>
+  <div class="lc lm3" style="grid-column:span 2"><div class="lt ldim" style="text-align:center">i人事继续承载</div></div>
+  <div class="lc lm3"><div class="lt ldim" style="text-align:center">i人事继续承载</div></div>
+  <div class="lc lm3"><div class="lt lk">调研 · 自研启动</div></div>
+  <div class="lc lm3"><div class="lt lk">自研开发 · 数据迁移</div><div class="lm">7月前完成切换</div></div>
+  <div class="lc lm3"><div class="lt lk">自建平台独立运行</div></div>
+  <div class="lc lm3"><div class="lt ldim">持续优化</div></div>
+
+  <!-- 绩效 -->
+  <div class="lr lm4"><div class="lr-n">绩效</div><div class="lr-s">长线推进</div></div>
+  <div class="lc lm4" style="grid-column:span 4"><div class="lt ldim" style="text-align:center">—</div></div>
+  <div class="lc lm4"><div class="lt lk">调研 · 方案设计 · 自研</div></div>
+  <div class="lc lm4"><div class="lt lk">MVP + 试点 1-2 部门</div><div class="lm">试点跑通一轮</div></div>
+  <div class="lc lm4"><div class="lt lk">分批推广</div><div class="lt">绩效→薪酬联动</div></div>
+
+  <!-- 人才画像 -->
+  <div class="lr lm6"><div class="lr-n">人才画像</div><div class="lr-s">阶段性规划</div></div>
+  <div class="lc lm6"><div class="lt lk">人才画像调研</div></div>
+  <div class="lc lm6"><div class="lt lk">模型设计</div><div class="lt">画像数据归集</div></div>
+  <div class="lc lm6"><div class="lt lk">MVP · 试点</div></div>
+  <div class="lc lm6"><div class="lt lk">人才盘点 · 继任规划</div></div>
+  <div class="lc lm6"><div class="lt ldim">持续优化</div></div>
+  <div class="lc lm6"><div class="lt ldim">持续优化</div></div>
+  <div class="lc lm6"><div class="lt ldim">持续优化</div></div>
+</div>
+
+<!-- Timeline Milestones -->
+<div class="l3-timeline">
+<div class="l3-timeline-title">关键里程碑</div>
+<div class="tl-phases">
+  <!-- Phase 1: 筑基·止血 -->
+  <div class="tl-phase" style="flex:2">
+    <div class="tl-phase-header">
+      <span class="tl-phase-tag">筑基 · 止血</span>
+      <div class="tl-phase-line"></div>
+    </div>
+    <div class="tl-phase-nodes">
+      <div class="tl-node">
+        <div class="tl-dot" style="background:#f59e0b"></div>
+        <div class="tl-date" style="color:#b45309">2026 Q2</div>
+        <div class="tl-label" style="color:#b45309">关舱门成本可视</div>
+        <span class="tl-mod" style="background:#fef3c7;color:#92400e">薪酬</span>
+        <div class="tl-sub">小时费归集完成<br>航线维度成本可查看</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-dot" style="background:#22c55e"></div>
+        <div class="tl-date" style="color:#166534">2026 Q2</div>
+        <div class="tl-label" style="color:#166534">考勤正式切换</div>
+        <span class="tl-mod" style="background:#d1fae5;color:#166534">考勤</span>
+        <div class="tl-sub">双轨验证通过<br>差异率 &lt; 0.5%</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-dot" style="background:#f59e0b"></div>
+        <div class="tl-date" style="color:#b45309">2027 Q1</div>
+        <div class="tl-label" style="color:#b45309">薪酬正式切换</div>
+        <span class="tl-mod" style="background:#fef3c7;color:#92400e">薪酬</span>
+        <div class="tl-sub">并行验证通过<br>薪酬不靠 Excel</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-dot" style="background:#06b6d4"></div>
+        <div class="tl-date" style="color:#0e7490">2027 Q2</div>
+        <div class="tl-label" style="color:#0e7490">i人事退场</div>
+        <span class="tl-mod" style="background:#cffafe;color:#0e7490">底座</span>
+        <div class="tl-sub">7月前全量迁移<br>自建平台独立运行</div>
+      </div>
+    </div>
+  </div>
+  <!-- Phase 2: 提效·决策 -->
+  <div class="tl-phase" style="flex:1">
+    <div class="tl-phase-header">
+      <span class="tl-phase-tag">提效 · 决策</span>
+      <div class="tl-phase-line"></div>
+    </div>
+    <div class="tl-phase-nodes">
+      <div class="tl-node">
+        <div class="tl-dot" style="background:#8b5cf6"></div>
+        <div class="tl-date" style="color:#5b21b6">2027 Q3</div>
+        <div class="tl-label" style="color:#5b21b6">绩效试点跑通</div>
+        <span class="tl-mod" style="background:#ede9fe;color:#5b21b6">绩效</span>
+        <div class="tl-sub">MVP 试点 1-2 部门<br>流程自动走完</div>
+      </div>
+      <div class="tl-node">
+        <div class="tl-dot" style="background:#f97316"></div>
+        <div class="tl-date" style="color:#9a3412">2027 Q4</div>
+        <div class="tl-label" style="color:#9a3412">人才画像上线</div>
+        <span class="tl-mod" style="background:#ffedd5;color:#9a3412">人才画像</span>
+        <div class="tl-sub">画像数据归集<br>人才盘点启动</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+const D = {
+perf:{name:'绩效管理',src:'04-16/04-17 绩效经理调研、04-14 内部会议',
+pains:['指标库只有名称没有结果，同一指标100人需逐个手动录入','指标平级无层级分解，战略目标完成情况无法向上汇总','判定式（一票否决）系统不支持，安全指标靠人工线下处理','人员调岗后方案无法自动更新，审批节点也无法实时变更','方案数量失控已500+个，方案间缺乏关联','员工看不懂最终得分，个人分+组织系数不透明','年度绩效无自动汇总，月度/360/测评全靠人工合并','考核自动下发和提醒完全缺失，靠人工催办','绩效申诉流程完全线下，无入口无反馈'],
+risks:['HR无法下发绩效管理以及推行至业务方'],
+insights:['指标评级，无法拆解并追踪完成情况','无法在绩效管理中管控指标','一票否决规则写在制度里，但系统无法执行，靠人工线下处理','年度绩效、360测评、月度结果分散在不同地方，人才决策没有完整数据依据'],
+values:['战略目标从指定到落地，全程可见','每个员工的绩效历史，完整留存，作为人才决策的投入依据'],
+quote:'"我想知道这些指标到底完成得怎么样" —— 绩效经理\n"判定式目前是没有的，都是我们手工操作的" —— 绩效经理'},
+attend:{name:'考勤假勤',src:'考勤需求记录表（52条）、考勤模块价值分析',
+pains:['人员类型多规则碎片化，行政班/业务班/空勤每种核算逻辑不同','规则在HR脑子里，系统只是记录本，换人就断档','所有异常月底才发现，HR被迫做救火队员','排班管理校验薄弱，混排导致折算异常但系统不拦截','HR是多系统的人肉中间件，OA/i人事/机资/钉钉数据靠手动补','每月考勤关账就是一次对账运动，HR变成外挂计算器','合规逻辑散落在经验中，劳动仲裁时举证困难'],
+insights:['制度复杂度与系统能力错配：规则增长速度远超系统适配能力','人盯人的管理模式没有被系统替代：人在替系统兜底','HR处于结构性弱势：有责无权，规则制定权不在HR手里','规则治理机制缺失：变更没有前置评估，缺乏版本管理'],
+values:['从核算员到规则管理者：HR定义规则，系统执行规则，经验被沉淀','从救火队员到风控中心：异常实时发现，管理节奏从月度清算变日常运营','从数据搬运工到决策支持者：考勤数据从行政记录变成管理工具','合规保障：劳动监察、审计、仲裁场景提供完整可追溯证据链'],
+quote:'"HR成了活规则引擎，人在规则在，人走规则散" —— 考勤痛点分析\n"把HR从规则的执行者提升为规则的治理者" —— 考勤价值主张'},
+salary:{name:'薪酬管理',src:'04-21 薪酬系统调研、04-13 内部会议',
+pains:['津补贴十余类散落OA审批流，各部门分散提报，月耗半天人工','五险一金模块未启用，增减员逻辑与实际业务时间差导致无法使用','线上线下双轨运行，系统数据不可信，以线下为准','定薪调薪流程断裂，仅算薪勉强线上化，管理层无全局视图','小时费数据孤岛，飞行/客舱/空保三套独立，仅飞行部分已对接','基础数据从100多张表汇总成30多张表再导入系统','关舱门人力成本无法实时化，仅能提供月度汇总'],
+insights:['通用SaaS与航空薪酬体系存在结构性错配，HR用人工弹性补偿系统刚性','数据可信度缺失导致系统价值塌陷：有数据≠可用≠可信','薪酬流程碎片化制约管理决策效率，每次决策依赖人工汇总','跨部门数据协同存在组织性障碍，技术能解决怎么接，解决不了谁来填'],
+values:['经营透明：将人力成本从月度财务科目升级为航班级经营指标','规则内控：核算规则从Excel公式升级为可配置、可审计的规则引擎','全流程贯通：打通定薪→调薪→算薪→发薪→预算的完整数据链路','成本可视：为财务提供航线维度日粒度成本数据，支撑经营决策'],
+quote:'"算工资最大的难点不是缺引擎，缺的是基础数据的维护和入口" —— 薪酬负责人\n"以线下为准" —— 薪酬经办人'},
+org:{name:'组织人事',src:'04-13 内部会议、04-14 内部会议',pains:['岗位层级只有3层，业务需要5层','数据分散无统一平台，入口太多','离职流程关联多、滞后严重','花名册字段语义与薪酬计算语义不一致','没有统一账户中心'],insights:[],values:['建立统一员工主数据底座，消除多系统数据不一致','组织架构与岗位编制在线化，支撑业务灵活调整','入转调离全流程线上闭环，减少人工滞后与遗漏'],quote:'"我们现在数据很分散...员工做不同的事情要从很多入口进去" —— 组织人事负责人'},
+cert:{name:'资质与执照',src:'04-13 内部会议',pains:['五类关键岗位必须持证上岗，资质过期上岗被局方查一例罚一例','资质管理系统分散，机务/飞行/乘务各自独立','训练和资质没有分开，缺乏统一校验机制','已出现过资质过期仍上岗的情况'],insights:[],values:['资质到期系统自动预警，杜绝无证上岗风险','统一资质管理平台，消除多系统分散带来的管理盲区'],quote:'"训练没有符合大纲要求让他去飞了，局方查到查一例罚一例" —— HR负责人'},
+recruit:{name:'招聘管理',src:'04-13 内部会议',pains:[],insights:[],values:[],quote:'"招聘用大易，基本上外挂好了，没问题" —— 产品负责人'},
+train:{name:'培训学习',src:'04-13 内部会议',pains:['通用培训与专业训练两套体系完全独立','培训结果与绩效/人才发展完全割裂'],insights:[],values:[],quote:'"各个业务部门有自己的训练系统和资质系统，人力管不了那么细" —— HR负责人'},
+talent:{name:'人才管理',src:'04-14 内部会议、绩效需求洞察',pains:['没有完整员工画像，人才决策靠主观判断','核心岗位人才稀缺但底数模糊'],insights:[],values:['构建完整人才画像，让人才决策从主观判断走向数据驱动'],quote:'"公司在高成本的人才投入上，实际上是在盲飞" —— 产品价值洞察'},
+selfservice:{name:'员工服务',src:'04-13 内部会议',pains:['没有统一员工服务平台，主要依托钉钉','服务入口分散，做不同事要从不同入口进'],insights:[],values:[],quote:'"员工第一个问题就是没有统一的平台，第二个就是服务入口太多" —— 组织人事负责人'},
+report:{name:'报表与分析',src:'04-14 内部会议、考勤需求记录表',pains:[],insights:[],values:[],quote:''},
+flow:{name:'流程与审批',src:'考勤需求记录表、04-21 薪酬调研',pains:['审批流程复杂且缺乏自动化联动','审批超时无预警机制，月底自动作废','定薪调薪审批碎片化，一人一条推送'],insights:[],values:[],quote:'"定薪调薪是每月汇总报表给领导审批的，但系统是一条一条推送" —— 薪酬经办人'},
+perm:{name:'人事权限',src:'04-13 内部会议、绩效管理痛点分析',pains:['绩效方案权限粒度过粗，无法实现公司锁定+部门自定义的分层控制','各系统权限分散，没有统一的人事权限管理体系'],insights:[],values:['统一权限管理体系，实现角色、数据、功能三维精细管控'],quote:'"想让部门只改个性化指标部分，必须给很大权限" —— 绩效经理'},
+form:{name:'表单引擎',src:'04-21 薪酬调研、考勤需求记录表',pains:['薪酬核算需搭建大量辅助表格来推演过程','津补贴十余类各走独立OA表单，无法统一管理'],insights:[],values:[],quote:'"我搭表的规则实际上也是根据线下Excel里面很多指标的公式一样的" —— 薪酬经办人'},
+msg:{name:'消息待办',src:'考勤需求记录表、04-14 内部会议',pains:['审批超时无人催办，月底自动作废才发现','绩效填报截止前无自动提醒，靠人工催办'],insights:[],values:[],quote:'"每月到了这个点，需要绩效对接来开启一下方案，然后才会提醒" —— 绩效经理'},
+trainpro:{name:'训练与健康',src:'04-13 内部会议',pains:['各部门训练系统独立，数据不互通','训练结果无法回流HR体系'],insights:[],values:['训练数据统一归集，打通与资质、绩效的数据链路'],quote:'"各个部门自己做培训，人力管不了那么细" —— HR负责人'},
+audit:{name:'合规与审计',src:'04-13 内部会议、考勤痛点分析',pains:[],insights:[],values:[],quote:''},
+data:{name:'数据底座',src:'04-21 薪酬调研、04-13 内部会议',pains:['花名册字段语义与业务语义不一致，导入顺序影响结果','基础数据大部分还在线下，多渠道提交格式不统一'],insights:[],values:[],quote:'"花名册的逻辑跟我们算的逻辑不一样，虽然都是一个字段名" —— 薪酬经办人'},
+integration:{name:'系统集成',src:'04-13 内部会议、04-21 薪酬调研',pains:['OA审批同步延迟，改5分钟仍需手动刷新','i人事离职日期因异常流程获取不到','机资系统排班数据需单独对接','没有统一账户中心，多端分别开户'],insights:[],values:[],quote:'"HR是这些系统之间的人肉中间件" —— 考勤痛点分析'}
+};
+function show(k){
+  const d=D[k],p=document.getElementById('sidePanel');
+  document.querySelectorAll('.arch-card').forEach(c=>c.classList.remove('sel'));
+  const card=document.querySelector(`[data-m="${k}"]`);
+  if(card)card.classList.add('sel');
+  let h=`<div class="sp-mod">${d.name}</div><div class="sp-src">${d.src}</div>`;
+  if(d.pains.length){h+=`<div class="sp-section"><span class="sp-section-title spt-pain">调研痛点 (${d.pains.length})</span><ul class="sp-list pain">`;d.pains.forEach(x=>{h+=`<li>${x}</li>`});h+='</ul></div>';}
+  if(d.risks&&d.risks.length){h+=`<div class="sp-section"><span class="sp-section-title spt-risk">风险 (${d.risks.length})</span><ul class="sp-list risk">`;d.risks.forEach(x=>{h+=`<li>${x}</li>`});h+='</ul></div>';}
+  if(d.insights&&d.insights.length){h+=`<div class="sp-section"><span class="sp-section-title spt-insight">需求洞察</span><ul class="sp-list insight">`;d.insights.forEach(x=>{h+=`<li>${x}</li>`});h+='</ul></div>';}
+  if(d.values&&d.values.length){h+=`<div class="sp-section"><span class="sp-section-title spt-value">价值分析</span><ul class="sp-list value">`;d.values.forEach(x=>{h+=`<li>${x}</li>`});h+='</ul></div>';}
+  if(d.quote){h+=`<div class="sp-quote">${d.quote.replace(/\n/g,'<br>')}</div>`;}
+  if(!d.pains.length&&!d.insights.length&&!d.values.length){h+='<div style="color:#9ca3af;font-size:12px;font-style:italic">当前模块暂无突出痛点</div>';}
+  p.innerHTML=h;
+}
+</script>
+</body>
+</html>
